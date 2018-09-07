@@ -1,1 +1,3 @@
-myjsonfile.json
+db.json
+config.js
+/node_modules
