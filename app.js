@@ -1,62 +1,74 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
+app.use(bodyParser.json());
 var path = require('path');
-const {instance} = require('./src/listener.js')
-// const worker = require('./src/worker.js')
+const { instance } = require('./src/listener.js')
 
+app.get('/', (req, res) => {
+    res.sendFile('/public/index.html');
+})
 
-// const low = require('lowdb')
-// const FileSync = require('lowdb/adapters/FileSync')
+app.get('/try-start', (req, res) => {
+    instance.tryStart()
+    res.send({
+        status: instance.isRunning,
+    })
+})
 
-// const adapter = new FileSync('db.json')
-// const db = low(adapter)
+app.get('/db', (req, res) => {})
 
-// // Set some defaults (required if your JSON file is empty)
-// db.defaults({ posts: [], user: {}, count: 0 })
-//   .write()
+app.get('/start', (req, res) => {
+    instance.start()
+    res.send({ status: instance.isRunning })
+})
+app.get('/stop', (req, res) => {
 
-// // Add a post
-// db.get('posts')
-//   .push({ id: 1, title: 'lowdb is awesome'})
-//   .write()
+    instance.stop()
+    res.send({ status: instance.isRunning })
+})
 
-// // Set a user using Lodash shorthand syntax
-// db.set('user.name', 'typicode')
-//   .write()
-  
-// // Increment count
-// db.update('count', n => n + 1)
-//   .write()
+app.get('/status', (req, res) => {
+    // hacky way to wait for call to complete 
+    (async() => {
+        try {
+            let result = await instance.IMESSAGE.getRecentChats(1)
+            if (result.length == 0) {
+                res.send({ status: "fail" })
+                return
+            }
+            res.send({
+                status: instance.isRunning,
+                slack: {
+                    status: instance.RTM.connected,
+                },
+                imessage: {
+                    status: true,
+                }
+            })
+        } catch (e) {
+            res.send({ status: "fail" })
+            console.log(e)
+        }
+    })();
+})
 
-instance.start()
+app.post('/config', (req, res) => {
+    // console.log(req.body)
+    for (let key of Object.keys(req.body)) {
+        // console.log(key, "->", req.body[key])
+        instance.updateVaildCredential(key, req.body[key])
+    }
+    instance.checkCredentials().then(function(result) {
+        res.send(result)
+    })
+})
 
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname + '/public/index.html'));
-// })
+app.get('/config', (req, res) => {
+    instance.checkCredentials().then(function(result) {
+        // console.log(result)
+        res.send(result)
+    })
+})
 
-
-// app.get('/db', (req, res) => {
-// // res.send(db.get('posts')
-// //   .find({ id: 1 })
-// //   .value())
-
-// })
-
-// app.get('/start', (req, res) => {
-// 	instance.start()
-//     res.send('Started Listener')
-// })
-// app.get('/stop', (req, res) => {
-// 	res.send('Kill program')
-//     instance.stop()
-// })
-
-// app.get('/status', (req, res) => {
-//     res.send('Hello World!')
-// })
-
-// app.get('/config', (req, res) => {
-//     res.send('Hello World!')
-// })
-
-// app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(3000, () => console.log('Example app listening on port 3000!'))
