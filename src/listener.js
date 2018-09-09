@@ -48,26 +48,6 @@ db.defaults({
     credentials: []
 }).write()
 
-// var request = require('request');
-
-
-// WEBADMIN.groups.list()
-//   .then((res) => {
-//     // `res` contains information about the channels
-//     // console.log(res)
-//     res.groups.forEach(c => {
-//         // console.log(c.id)
-//         let chan =  c.id
-//         console.log(ADMIN_TOKEN)
-//         console.log(chan)
-//         // WEBADMIN.groups.unarchive({channel: chan})
-//         WEBADMIN.groups.leave({channel: chan})
-//         // WEBADMIN.conversations.close({channel: chan})
-//         // {ADMIN_TOKEN, chan}
-//     });
-//   })
-//   .catch(console.error);
-
 var self;
 
 class Bridge {
