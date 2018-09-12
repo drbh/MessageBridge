@@ -5,9 +5,13 @@ app.use(bodyParser.json());
 var path = require('path');
 const { instance } = require('./src/listener.js')
 
-app.get('/', (req, res) => {
-    res.sendFile('/public/index.html');
-})
+
+app.use(express.static(__dirname));
+
+// app.get('/', (req, res) => {
+//     // res.sendFile('/public/index.html');
+//     res.sendFile(__dirname+ '/index.html');
+// })
 
 app.get('/try-start', (req, res) => {
     instance.tryStart()
@@ -23,7 +27,6 @@ app.get('/start', (req, res) => {
     res.send({ status: instance.isRunning })
 })
 app.get('/stop', (req, res) => {
-
     instance.stop()
     res.send({ status: instance.isRunning })
 })
