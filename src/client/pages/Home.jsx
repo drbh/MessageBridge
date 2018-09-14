@@ -11,11 +11,12 @@ export class Home extends Component {
 		super(props);
 		this.isSlackConnected = false;
 		this.isIMessageConnected = false;
-		this.isEnabled = false;
+		this.isOn = false;
 	}
 
 	componentDidMount() {
 		// this method should update the variables on the class with a server call and then call force update
+		// could be multiple calls that each update a variable and call force update independently
 
 		// ServerService.postJson('/isSlackConnected').then((response) => {
 		// 	this.isSlackConnected = response.isSlackConnected;
@@ -33,13 +34,17 @@ export class Home extends Component {
 			backgroundColor: this.isSlackConnected ? ColorService.enabledGreen : ColorService.disabledRed
 		};
 
+		let onTextStyle = {
+			color: ColorService.enabledGreen
+		};
+
 		return (
 			<div className={classes.outerDiv}>
 				<div className={classes.statusDiv}>
 					<div className={classes.iMessageStatus}
 						 onClick={() => {
-						 	this.isIMessageConnected = !this.isIMessageConnected;
-						 	this.forceUpdate();
+							 this.isIMessageConnected = !this.isIMessageConnected;
+							 this.forceUpdate();
 						 }}
 						 style={iMessageStatusStyle}>
 						<div className={classes.iMessageLogoContainer}>
@@ -48,8 +53,8 @@ export class Home extends Component {
 					</div>
 					<div className={classes.slackStatus}
 						 onClick={() => {
-						 	this.isSlackConnected = !this.isSlackConnected;
-						 	this.forceUpdate();
+							 this.isSlackConnected = !this.isSlackConnected;
+							 this.forceUpdate();
 						 }}
 						 style={slackStatusStyle}>
 						<div className={classes.slackLogoContainer}>
@@ -58,16 +63,23 @@ export class Home extends Component {
 					</div>
 				</div>
 				<div className={classes.statusButtonContainer}>
-					<Toggle isOn={this.isEnabled}
+					<Toggle isOn={this.isOn}
 							onClick={() => this.toggleEnabled()}
 							disabled={!this.isIMessageConnected || !this.isSlackConnected}/>
+					<div className={classes.onOffText}
+						 style={this.isOn ? onTextStyle : {}}>
+						{this.isOn ? 'on' : 'off'}
+					</div>
 				</div>
 			</div>
 		);
 	}
 
 	toggleEnabled() {
-		this.isEnabled = !this.isEnabled;
+		// this should call start or stop based on this.isEnabled
+		// when the call returns it should set this.isEnabled correctly and then call this.forceUpdate()
+
+		this.isOn = !this.isOn;
 		this.forceUpdate();
 	}
 }
@@ -116,8 +128,9 @@ const styles = {
 	statusButtonContainer: {
 
 	},
-	statusButton: {
-
+	onOffText: {
+		color: ColorService.extraLightGrey,
+		margin: 10
 	}
 };
 
