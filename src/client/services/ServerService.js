@@ -1,6 +1,10 @@
 
 class ServerService {
 
+	getStatus() {
+		return this.postJson('/status')
+	}
+
 	postJson(requestPath, json) {
 		return new Promise((resolve, reject) => {
 			let xhr = new XMLHttpRequest();

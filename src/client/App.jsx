@@ -33,11 +33,11 @@ export class App extends Component {
 	render() {
 		return (
 			<div className={classes.outerDiv}>
-				<TopBar />
+				{/*<TopBar />*/}
 				<div className={classes.content}>
 					{this.renderAppContent()}
 				</div>
-				<BottomBar/>
+				{/*<BottomBar/>*/}
 			</div>
 		);
 	}
