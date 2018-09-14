@@ -1,5 +1,18 @@
 
+let instance = null;
+
 class ServerService {
+
+	constructor() {
+		this.baseServerUrl = 'host:port';
+	}
+
+	get instance() {
+		if (!instance) {
+			instance = new ServerService();
+		}
+		return instance;
+	}
 
 	typicalServiceMethod(arg1, arg2) {
 		let path = '/typicalPath';
@@ -12,10 +25,22 @@ class ServerService {
 		// return this.getJson(path, jsonData);
 	}
 
+	getAppStatus() {
+		return this.getJson('/app-status', {});
+	}
+
+	startApp() {
+		return this.getJson('/start', {});
+	}
+
+	stopApp() {
+		return this.getJson('/stop', {});
+	}
+
 	postJson(requestPath, json) {
 		return new Promise((resolve, reject) => {
 			let xhr = new XMLHttpRequest();
-			xhr.open("POST", '/' + requestPath, true);
+			xhr.open("POST", this.baseServerUrl + '/' + requestPath, true);
 
 			xhr.setRequestHeader('Content-Type' , 'application/json ; charset=UTF-8' );
 
@@ -36,7 +61,7 @@ class ServerService {
 		});
 	}
 
-	static getJson(requestPath, params) {
+	getJson(requestPath, params) {
 		return new Promise((resolve, reject) => {
 			let paramsString = '';
 
@@ -50,7 +75,7 @@ class ServerService {
 			}
 
 			let xhr = new XMLHttpRequest();
-			xhr.open("GET", '/' + requestPath + paramsString, true);
+			xhr.open("GET", this.baseServerUrl + '/' + requestPath + paramsString, true);
 
 			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4) {
@@ -70,4 +95,4 @@ class ServerService {
 	}
 }
 
-export default new ServerService();
+export default ServerService;

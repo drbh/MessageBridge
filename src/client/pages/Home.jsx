@@ -18,7 +18,7 @@ export class Home extends Component {
 		// this method should update the variables on the class with a server call and then call force update
 		// could be multiple calls that each update a variable and call force update independently
 
-		// ServerService.typicalServiceMethod().then((response) => {
+		// ServerService.instance.getAppStatus().then((response) => {
 		// 	this.isSlackConnected = response.isSlackConnected;
 		// 	this.forceUpdate();
 		// })
