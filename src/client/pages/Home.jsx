@@ -11,7 +11,7 @@ export class Home extends Component {
 		super(props);
 		this.isSlackConnected = false;
 		this.isIMessageConnected = false;
-		this.isEnabled = false;
+		this.isOn = false;
 	}
 
 	componentDidMount() {
@@ -32,6 +32,10 @@ export class Home extends Component {
 
 		let slackStatusStyle = {
 			backgroundColor: this.isSlackConnected ? ColorService.enabledGreen : ColorService.disabledRed
+		};
+
+		let onTextStyle = {
+			color: ColorService.enabledGreen
 		};
 
 		return (
@@ -59,9 +63,13 @@ export class Home extends Component {
 					</div>
 				</div>
 				<div className={classes.statusButtonContainer}>
-					<Toggle isOn={this.isEnabled}
+					<Toggle isOn={this.isOn}
 							onClick={() => this.toggleEnabled()}
 							disabled={!this.isIMessageConnected || !this.isSlackConnected}/>
+					<div className={classes.onOffText}
+						 style={this.isOn ? onTextStyle : {}}>
+						{this.isOn ? 'on' : 'off'}
+					</div>
 				</div>
 			</div>
 		);
@@ -71,7 +79,7 @@ export class Home extends Component {
 		// this should call start or stop based on this.isEnabled
 		// when the call returns it should set this.isEnabled correctly and then call this.forceUpdate()
 
-		this.isEnabled = !this.isEnabled;
+		this.isOn = !this.isOn;
 		this.forceUpdate();
 	}
 }
@@ -120,8 +128,9 @@ const styles = {
 	statusButtonContainer: {
 
 	},
-	statusButton: {
-
+	onOffText: {
+		color: ColorService.extraLightGrey,
+		margin: 10
 	}
 };
 
