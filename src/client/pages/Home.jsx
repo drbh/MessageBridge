@@ -16,6 +16,7 @@ export class Home extends Component {
 
 	componentDidMount() {
 		// this method should update the variables on the class with a server call and then call force update
+		// could be multiple calls that each update a variable and call force update independently
 
 		// ServerService.postJson('/isSlackConnected').then((response) => {
 		// 	this.isSlackConnected = response.isSlackConnected;
@@ -38,8 +39,8 @@ export class Home extends Component {
 				<div className={classes.statusDiv}>
 					<div className={classes.iMessageStatus}
 						 onClick={() => {
-						 	this.isIMessageConnected = !this.isIMessageConnected;
-						 	this.forceUpdate();
+							 this.isIMessageConnected = !this.isIMessageConnected;
+							 this.forceUpdate();
 						 }}
 						 style={iMessageStatusStyle}>
 						<div className={classes.iMessageLogoContainer}>
@@ -48,8 +49,8 @@ export class Home extends Component {
 					</div>
 					<div className={classes.slackStatus}
 						 onClick={() => {
-						 	this.isSlackConnected = !this.isSlackConnected;
-						 	this.forceUpdate();
+							 this.isSlackConnected = !this.isSlackConnected;
+							 this.forceUpdate();
 						 }}
 						 style={slackStatusStyle}>
 						<div className={classes.slackLogoContainer}>
@@ -67,6 +68,9 @@ export class Home extends Component {
 	}
 
 	toggleEnabled() {
+		// this should call start or stop based on this.isEnabled
+		// when the call returns it should set this.isEnabled correctly and then call this.forceUpdate()
+
 		this.isEnabled = !this.isEnabled;
 		this.forceUpdate();
 	}
